@@ -1,0 +1,69 @@
+/*
+ * bag.cpp
+ *
+ *  Created on: Feb 5, 2019
+ *      Author: michelemaresca
+ */
+
+
+namespace michele_maresca{
+template <class Item>
+bool bag<Item>::erase_one(const Item& target) {
+node<Item>* target_ptr;
+	target_ptr=list_search(head_ptr,target);
+	if(target_ptr == NULL)
+		return false;
+
+		target_ptr->set_data(head_ptr->data());
+		list_head_remove(head_ptr);
+		--many_nodes;
+		return false;
+
+}
+
+template <class Item>
+bag<Item>::bag(const bag<Item>& source){
+	node<Item>* tail_ptr;
+	list_copy(source.head_ptr,head_ptr,tail_ptr);
+	many_nodes=source.many_nodes;
+}
+
+template<class Item>
+typename bag<Item>::size_type bag<Item>::erase(const Item& target) {
+	size_type answer=0;
+	node<Item>* target_ptr;
+	target_ptr=list_search(head_ptr,target);
+	while(target_ptr != NULL){
+		++answer;
+		target_ptr->set_data(head_ptr->data());
+		target_ptr=target_ptr->link();
+		target_ptr=list_search(target_ptr,target);
+		list_head_remove(head_ptr);
+	}
+}
+
+template<class Item>
+typename bag<Item>::size_type bag<Item>::count(const Item& target)const  {
+size_type answer=0;
+node<Item>* target_ptr;
+target_ptr=list_search(head_ptr,target);
+while(target_ptr != NULL){
+	++answer;
+	target_ptr=target_ptr->link();
+	target_ptr=list_search(target_ptr,target);
+}
+return answer;
+}
+//template<class Item>
+//void bag<Item>::operator =(const bag& source) {
+//
+//}
+//template<class Item>
+//void bag<Item>::operator +=(const bag<Item>& addend) {
+//(*this)=(*this)+addend;
+//}
+
+}
+
+
+

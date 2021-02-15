@@ -1,0 +1,70 @@
+/*
+ * node.cpp
+ *
+ *  Created on: Feb 5, 2019
+ *      Author: michelemaresca
+ */
+
+
+
+
+namespace michele_maresca{
+template <class Item>
+void list_head_insert(node<Item>*& head_ptr,const Item& entry){
+	head_ptr=new node<Item>(entry,head_ptr);
+}
+
+template <class Item>
+void list_head_remove(node<Item>*& head_ptr){
+	node<Item>* remove_ptr;
+	remove_ptr=head_ptr;
+	head_ptr=head_ptr->link();
+	delete remove_ptr;
+}
+
+template <class Item>
+void list_clear(node<Item>*& head_ptr){
+	while(head_ptr != NULL){
+		list_head_remove(head_ptr);
+	}
+}
+
+template <class Item>
+void list_copy(const node<Item>* source_ptr,node<Item>*& head_ptr,node<Item>*& tail_ptr){
+	head_ptr = NULL;
+	tail_ptr = NULL;
+
+	if(source_ptr == NULL)
+		return;
+
+	list_head_insert(head_ptr,source_ptr->data());
+	tail_ptr=head_ptr;
+
+	source_ptr=source_ptr->link();
+
+	while(source_ptr != NULL){
+		list_insert(tail_ptr,source_ptr->data());
+		tail_ptr=tail_ptr->link();
+		source_ptr=source_ptr->link();
+	}
+}
+
+template <class Item>
+node<Item>* list_search(node<Item>* head_ptr,const Item& target){
+	node<Item>* cursor;
+	for(cursor=head_ptr;cursor != NULL; cursor=cursor->link()){
+		if(cursor->data()  == target){
+			return cursor;
+		}
+	}
+	return NULL;
+}
+
+template <class Item>
+void list_ìnsert(node<Item>* previous_ptr,const Item& entry){
+	node<Item>* insert_ptr;
+	insert_ptr=new node<Item>(entry,previous_ptr->link());
+	previous_ptr->link();
+}
+
+}
