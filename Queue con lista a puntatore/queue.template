@@ -1,0 +1,53 @@
+/*
+ * queue.cpp
+ *
+ *  Created on: Jan 31, 2019
+ *      Author: michelemaresca
+ */
+
+namespace michele_maresca{
+template <class Item>
+queue<Item>::queue(){
+	front_ptr=NULL;
+	rear_ptr=NULL;
+	count=0;
+}
+template <class Item>
+	queue<Item>::~queue(){
+	list_clear(front_ptr);
+}
+template <class Item>
+	queue<Item>::queue(const queue<Item>& source){
+	list_copy(source.front_ptr,front_ptr,rear_ptr);
+	count=source.count;
+}
+
+template <class Item>
+void queue<Item>::operator =(const queue<Item>& source){
+
+	if(&source == this)
+	return;
+
+	list_clear(front_ptr);
+	list_copy(source.front_ptr,front_ptr,rear_ptr);
+}
+template <class Item>
+void queue<Item>::pop() {
+		assert(!empty());
+		list_head_remove(front_ptr);
+		--count;
+	}
+template <class Item>
+void queue<Item>::push(const Item& entry) {
+	if(empty()){
+		list_head_insert(front_ptr,entry);
+		rear_ptr=front_ptr->link();
+	}else{
+		list_insert(rear_ptr, entry);
+		rear_ptr=rear_ptr->link();
+	}
+	++count;
+}
+
+
+}

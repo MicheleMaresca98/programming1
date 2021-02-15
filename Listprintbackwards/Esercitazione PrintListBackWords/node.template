@@ -1,0 +1,107 @@
+/*
+ * node.cpp
+ *
+ *  Created on: Jan 30, 2019
+ *      Author: michelemaresca
+ */
+
+
+#include "node.h"
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+namespace michele_maresca {
+
+template <class NodePtr, class Item>
+NodePtr list_search( NodePtr head_ptr,const Item  & entry){
+	NodePtr cursor_ptr=head_ptr;
+	while(cursor_ptr!=NULL){
+		if(cursor_ptr->data()==entry)
+		{
+			return cursor_ptr;
+		}
+		cursor_ptr=cursor_ptr->link();
+	}
+	return NULL;
+}
+template <class Item>
+void list_insert(const Item & data,node<Item>*previous_ptr){
+	node<Item>*insert_ptr=NULL;
+	insert_ptr=new node<Item>(previous_ptr->link(),data);
+	previous_ptr->set_link(insert_ptr);
+}
+template <class Item>
+void list_head_insert(const Item  & data,node<Item>*&head_ptr){
+	head_ptr=new node<Item>(head_ptr,data);
+}
+template <class Item>
+void list_print(const node<Item> * target_ptr) {
+	const node<Item>* cursor_ptr;
+
+	for(cursor_ptr=target_ptr;cursor_ptr!=NULL;cursor_ptr=cursor_ptr->link())
+	{
+		cout<< cursor_ptr->data() <<" ";
+	}
+
+}
+template <class Item>
+void list_head_remove(node<Item>*&head_ptr){
+	node<Item> *remove_ptr=head_ptr;
+	head_ptr=head_ptr->link();
+	delete remove_ptr;
+}
+template <class Item>
+void list_clear(node<Item>*&head_ptr){
+	while(head_ptr!=NULL){
+		list_head_remove(head_ptr);
+	}
+}
+template <class Item>
+void list_ord(node<Item>*& head_ptr,const Item & entry){
+	if(head_ptr==NULL)
+	{
+		list_head_insert(entry,head_ptr);
+	}
+	else
+	{
+		if(entry<=head_ptr->data())
+		{
+			list_head_insert(entry,head_ptr);
+		}
+		else
+		{
+			node<Item>*cursor=head_ptr->link();
+			while(cursor!=NULL)
+			{
+				if(entry<=cursor->data())
+				{
+					list_insert(entry,previous_ptr(head_ptr,cursor));
+					return;
+				}
+				cursor=cursor->link();
+			}
+			list_insert(entry,previous_ptr(head_ptr,cursor));
+
+		}
+	}
+}
+template <class Item>
+node<Item>* previous_ptr(node<Item>*head_ptr,const node<Item>*trovato_ptr){
+	node<Item>*previous_ptr;
+	previous_ptr=head_ptr;
+	while(previous_ptr->link()!=trovato_ptr)
+	{
+		previous_ptr=previous_ptr->link();
+	}
+	return previous_ptr;
+}
+template <class Item>
+void list_print_back(const node<Item>*head_ptr){
+	const node<Item>*cursor=head_ptr;
+	if(cursor!=NULL){
+		list_print_back(cursor->link());
+		cout<<cursor->data()<<" ";
+	}
+}
+}
+

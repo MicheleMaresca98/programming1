@@ -1,0 +1,206 @@
+/*
+ * node.cpp
+ *
+ *  Created on: Jan 30, 2019
+ *      Author: michelemaresca
+ */
+#include "node.h"
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+namespace michele_maresca {
+
+template <class Item>
+void list_print(const node<Item> * target_ptr) {
+	const node<Item>* cursor_ptr;
+
+	for(cursor_ptr=target_ptr;cursor_ptr!=NULL;cursor_ptr=cursor_ptr->link())
+	{
+		cout<< cursor_ptr->data() <<" ";
+	}
+
+}
+template <class Item>
+void list_head_insert(node<Item>* &head,const Item& entry){
+	head=new node<Item>(entry,head);
+}
+template <class Item>
+node<Item>* previous_ptr(node<Item>*head_ptr,const node<Item>*trovato_ptr){
+	node<Item>*previous_ptr;
+	previous_ptr=head_ptr;
+	while(previous_ptr->link()!=trovato_ptr)
+	{
+		previous_ptr=previous_ptr->link();
+	}
+	return previous_ptr;
+}
+template <class Item>
+node<Item>* list_search(node<Item>*head_ptr,const Item & target){
+	node<Item>*cursor_ptr;
+	cursor_ptr=head_ptr;
+
+	while(cursor_ptr!=NULL){
+		if(cursor_ptr->data()==target){
+			return cursor_ptr;
+		}
+		cursor_ptr = cursor_ptr->link();
+	}
+	return NULL;
+
+}
+template <class Item>
+const node<Item>*list_search(const node<Item>*head_ptr,const Item & target){
+	const node<Item>*cursor_ptr;
+	cursor_ptr=head_ptr;
+
+	while(cursor_ptr!=NULL){
+		if(cursor_ptr->data()==target){
+			return cursor_ptr;
+		}
+		cursor_ptr = cursor_ptr->link();
+	}
+	return NULL;
+
+}
+
+template <class Item>
+void list_insert(node<Item>* previous_ptr,const Item &entry){
+
+	node<Item>* insert_ptr = nullptr;
+
+	insert_ptr= new node<Item>(entry,previous_ptr->link());
+	previous_ptr->set_link(insert_ptr);
+
+}
+template <class Item>
+std::size_t length(const node<Item>*head_ptr){
+	size_t l=0;
+	const node<Item>*cursor_ptr;
+	for(cursor_ptr=head_ptr;cursor_ptr!=NULL;cursor_ptr=cursor_ptr->link()){
+		l++;
+	}
+	return l;
+}
+template <class Item>
+node<Item>* list_locate(node<Item>*head_ptr,size_t position){
+	node<Item>*cursor_ptr;
+	cursor_ptr=head_ptr;
+	for(size_t i=0;(i<position)&&(cursor_ptr!=NULL);i++)
+	{
+		cursor_ptr=cursor_ptr->link();
+	}
+	return cursor_ptr;
+}
+
+template <class Item>
+const node<Item>* list_locate(const node<Item>*head_ptr,size_t position){
+	const node<Item>*cursor_ptr;
+	cursor_ptr=head_ptr;
+	for(size_t i=0;(i<position)&&(cursor_ptr!=NULL);i++)
+	{
+		cursor_ptr=cursor_ptr->link();
+	}
+	return cursor_ptr;
+}
+template <class Item>
+void list_head_remove(node<Item>*&head_ptr){
+	node<Item>*remove_ptr;
+	remove_ptr=head_ptr;
+	head_ptr=head_ptr->link();
+	delete remove_ptr;
+
+
+}
+template <class Item>
+void list_remove(node<Item>*previous_ptr){
+	node<Item>*remove_ptr;
+	remove_ptr=previous_ptr->link();
+	previous_ptr->set_link(remove_ptr->link());
+	delete remove_ptr;
+}
+
+template <class Item>
+void list_clear(node<Item>*&head_ptr){
+	while(head_ptr!=NULL){
+		list_head_remove(head_ptr);
+	}
+
+}
+template <class Item>
+void list_copy(const node<Item>*source_ptr, node<Item>*&head_ptr2,node<Item>*&tail_ptr2){
+	head_ptr2=NULL;
+	tail_ptr2=NULL;
+	if(source_ptr==NULL)
+	{
+		return;
+	}
+
+	list_head_insert(head_ptr2,source_ptr->data());
+	tail_ptr2=head_ptr2;
+	source_ptr=source_ptr->link();
+	while(source_ptr!=NULL){
+		list_insert(tail_ptr2,source_ptr->data());
+		tail_ptr2 = tail_ptr2->link( );
+		source_ptr=source_ptr->link();
+	}
+
+}
+template <class Item>
+std::size_t list_occurences(const node<Item>*head_ptr,const Item & entry){
+	size_t count;
+	count=0;
+	const node<Item>*cursor_ptr;
+	cursor_ptr=head_ptr;
+	while(cursor_ptr!=NULL){
+		if(cursor_ptr->data()==entry){
+			count++;
+		}
+		cursor_ptr=cursor_ptr->link();
+	}
+	return count;
+}
+template <class Item>
+void list_ord_insert(const Item & data,node<Item> *&head_ptr){
+	if(head_ptr==NULL){
+		list_head_insert(head_ptr,data);
+	}
+	else{
+		if(data<=head_ptr->data())
+		{
+			list_head_insert(head_ptr,data);
+		}
+		else
+		{
+			node<Item> * cursor=head_ptr->link();
+			while(cursor!=NULL){
+
+				if(data<=cursor->data()){
+					list_insert(previous_ptr(head_ptr,cursor),data);
+					return;
+				}
+				cursor=cursor->link();
+		}
+		list_insert(previous_ptr(head_ptr,cursor),data);
+
+		}
+
+	}
+}
+template <class Item>
+node<Item>* list_merge(node<Item> *head_ptr1,node<Item> *head_ptr2){
+	node<Item>*head_ptr;
+	node<Item>*tail_ptr;
+
+	list_copy(head_ptr1,head_ptr,tail_ptr);
+
+	node<Item>*cursor=head_ptr2;
+	while(cursor!=NULL){
+		list_ord_insert(cursor->data(),head_ptr);
+		cursor=cursor->link();
+	}
+	return head_ptr;
+}
+}
+
+
+
