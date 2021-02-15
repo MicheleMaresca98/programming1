@@ -1,0 +1,39 @@
+/*
+ * coda.cpp
+ *
+ *  Created on: Feb 5, 2019
+ *      Author: michelemaresca
+ */
+#include <cassert>
+
+namespace michele_maresca{
+
+template <class Item>
+const typename coda<Item>::size_type coda<Item>::CAPACITY;
+
+
+template <class Item>
+coda<Item>::coda(){
+	count=0;
+	first=0;
+	last=CAPACITY-1;
+}
+
+template <class Item>
+	void coda<Item>::push(const Item& entry){
+	assert(size() < CAPACITY);
+
+	last=next_index(last);
+	data[last]=entry;
+	++count;
+}
+
+
+template <class Item>
+	void coda<Item>::pop(){
+	assert(!empty());
+
+	first=next_index(first);
+	--count;
+}
+}

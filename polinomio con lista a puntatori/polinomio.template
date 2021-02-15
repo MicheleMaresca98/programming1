@@ -1,0 +1,74 @@
+/*
+ * polinomio.cpp
+ *
+ *  Created on: Feb 6, 2019
+ *      Author: michelemaresca
+ */
+
+
+
+namespace michele_maresca{
+template <class Item>
+polinomio<Item> operator + ( polinomio<Item>& p1, polinomio<Item>& p2){
+	polinomio<Item> sum;
+	node<Item>* cursor1;
+	node<Item>* cursor2;
+
+	for(cursor1=p1.get_link();cursor1 != NULL; cursor1=cursor1->link()){
+		sum.insert(cursor1->coef(),cursor1->exp());
+	}
+	for(cursor2=p2.get_link();cursor2 != NULL; cursor2=cursor2->link()){
+			sum.insert(cursor2->coef(),cursor2->exp());
+		}
+	return sum;
+}
+
+template <class Item>
+polinomio<Item> operator - ( polinomio<Item>& p1, polinomio<Item>& p2){
+	polinomio<Item> dif;
+		node<Item>* cursor1;
+		node<Item>* cursor2;
+		Item dif_coef;
+		for(cursor1=p1.get_link();cursor1 != NULL; cursor1=cursor1->link()){
+			dif.insert(cursor1->coef(),cursor1->exp());
+		}
+		for(cursor2=p2.get_link();cursor2 != NULL; cursor2=cursor2->link()){
+				dif_coef=0;
+				dif_coef-=cursor2->coef();
+				dif.insert(dif_coef,cursor2->exp());
+			}
+		return dif;
+}
+
+template <class Item>
+polinomio<Item> operator * ( polinomio<Item>& p1, polinomio<Item>& p2){
+	polinomio<Item> prod;
+	node<Item>* cursor1;
+	node<Item>* cursor2;
+	for(cursor1=p1.get_link();cursor1 != NULL; cursor1=cursor1->link()){
+			for(cursor2=p2.get_link();cursor2 != NULL; cursor2=cursor2->link()){
+					prod.insert(cursor1->coef()*cursor2->coef(),cursor1->exp()+cursor2->exp());
+				}
+			}
+	return prod;
+}
+
+template <class Item>
+void polinomio<Item>::operator = (const polinomio<Item>& source){
+	node<Item>* tail_ptr;
+	if (source.link == link)
+		return;
+
+	list_clear(link);
+	list_copy(source.link,link,tail_ptr);
+
+}
+
+template <class Item>
+polinomio<Item>::polinomio(const polinomio<Item>& source){
+	node<Item>* tail_ptr;
+	list_copy(source.link,link,tail_ptr);
+}
+
+
+}

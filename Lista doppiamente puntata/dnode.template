@@ -1,0 +1,21 @@
+/*
+ * dnode.cpp
+ *
+ *  Created on: Feb 7, 2019
+ *      Author: michelemaresca
+ */
+
+#include <iostream>
+using namespace std;
+namespace michele_maresca{
+template <class Item>
+  	void dnode<Item>::list_print(){
+  		node<Item>* head_cursor=link_fore;
+  		node<Item>* tail_cursor=link_back;
+
+  		while(head_cursor != tail_cursor){
+  			cout<<head_cursor->data()<<" ";
+  			head_cursor=head_cursor->link();
+  		}
+  	}
+}
