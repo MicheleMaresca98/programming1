@@ -1,0 +1,21 @@
+/*
+ * stack.cpp
+ *
+ *  Created on: Feb 7, 2019
+ *      Author: michelemaresca
+ */
+
+
+
+namespace michele_maresca{
+
+template <class Item>
+void stack<Item>::operator = (const stack<Item>& source){
+	node<Item>*tail_ptr;
+	if(source == this)
+		return;
+
+	list_clear(top_ptr);
+	list_copy(source.top_ptr,top_ptr,tail_ptr);
+}
+}

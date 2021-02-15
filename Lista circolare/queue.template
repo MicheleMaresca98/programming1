@@ -1,0 +1,50 @@
+/*
+ * queue.cpp
+ *
+ *  Created on: Feb 9, 2019
+ *      Author: michelemaresca
+ */
+
+#include <cassert>
+namespace michele_maresca {
+
+template<class Item>
+void queue<Item>::push(const Item& entry) {
+if(front_ptr == NULL){
+	list_head_insert(front_ptr,entry);
+	++count;
+}else{
+	node<Item>* tail_ptr=front_ptr;
+	while(tail_ptr->link() != NULL){
+		tail_ptr=tail_ptr->link();
+	}
+	list_insert(tail_ptr,entry);
+	++count;
+}
+}
+template<class Item>
+void queue<Item>::pop() {
+assert(!empty());
+list_head_remove(front_ptr);
+--count;
+}
+template<class Item>
+Item queue<Item>::front() const {
+	assert(!empty());
+	return front_ptr->data();
+}
+template<class Item>
+void queue<Item>::operator =(const queue<Item>& source) {
+	node<Item>* tail_ptr;
+	if (this == &source)
+		return;
+
+	list_clear(front_ptr);
+	list_copy(source.front_ptr,front_ptr,tail_ptr);
+	count=source.count;
+}
+
+
+
+}
+

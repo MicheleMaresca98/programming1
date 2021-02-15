@@ -1,0 +1,155 @@
+/*
+ * node.cpp
+ *
+ *  Created on: Feb 1, 2019
+ *      Author: michelemaresca
+ */
+
+#include <cstdlib>
+#include "node.h"
+using namespace std;
+
+namespace michele_maresca {
+
+template <class Item>
+void list_head_insert(const Item & coeff,const Item& exp,node<Item>*&head_ptr){
+	head_ptr=new node<Item>(coeff,exp,head_ptr);
+}
+template <class Item>
+void list_print( node<Item>*head_ptr){
+	node<Item>*cursor_ptr;
+	for(cursor_ptr=head_ptr;cursor_ptr!=NULL;cursor_ptr=cursor_ptr->link())
+	{
+		if(cursor_ptr->data()!=0)
+		{
+			cout<<cursor_ptr->data()<<"x^"<<cursor_ptr->exp();
+		}
+		if((cursor_ptr->link()!=NULL) && (cursor_ptr->link()->data()>0))
+		{
+			cout<<" + ";
+		}
+
+	}
+}
+template <class Item>
+void list_insert(const Item & coeff,const Item &exp ,node<Item>*previous_ptr){
+	node<Item>*insert_ptr;
+	insert_ptr=new node<Item>(coeff,exp,previous_ptr->link());
+	previous_ptr->set_link(insert_ptr);
+}
+template <class Item,class NodePtr>
+NodePtr list_search(NodePtr head_ptr,Item entry, Item exp){
+	NodePtr cursor_ptr;
+	for(cursor_ptr=head_ptr;cursor_ptr!=NULL;cursor_ptr=cursor_ptr->link())
+	{
+		if(cursor_ptr->data()==entry && cursor_ptr->exp())
+		{
+			return cursor_ptr;
+		}
+	}
+}
+template <class NodePtr>
+NodePtr list_locate(NodePtr head_ptr,size_t position){
+	NodePtr cursor_ptr;
+	cursor_ptr=head_ptr;
+	for(size_t i=0;(i<position)&&(cursor_ptr!=NULL);i++){
+		cursor_ptr=cursor_ptr->link;
+	}
+	return cursor_ptr;
+}
+template <class Item>
+void list_head_remove(node<Item>*&head_ptr){
+	node<Item>*remove_ptr;
+	remove_ptr=head_ptr;
+	head_ptr=head_ptr->link();
+	delete remove_ptr;
+}
+template <class Item>
+node<Item>*previous_pr(node<Item>*head_ptr,const node<Item>*trovato){
+	node<Item>*cursor_ptr=head_ptr;
+	while(cursor_ptr->link()!=trovato)
+	{
+		cursor_ptr=cursor_ptr->link();
+	}
+	return cursor_ptr;
+}
+template <class Item>
+void list_remove(node<Item>*previous_ptr){
+	node<Item>*remove_ptr;
+	remove_ptr=previous_ptr->link();
+	previous_ptr->set_link(remove_ptr->link());
+	delete remove_ptr;
+}
+template <class Item>
+size_t length(const node<Item>*head_ptr){
+size_t count=0;
+const node<Item>*cursor_ptr=head_ptr;
+	while(cursor_ptr!=NULL)
+	{
+		count++;
+		cursor_ptr=cursor_ptr->link();
+	}
+	return count;
+}
+template <class Item>
+void list_clear(node<Item>*&head_ptr){
+	while(head_ptr!=NULL)
+	{
+		list_head_remove(head_ptr);
+	}
+}
+template <class Item>
+void list_copy(node<Item>*source_ptr,node<Item>*&head,node<Item>*&tail){
+	tail=NULL;
+	head=NULL;
+	if(source_ptr==NULL)
+	{
+		return;
+	}
+	list_head_insert(source_ptr->data(),source_ptr->exp(),head);
+	tail=head;
+	source_ptr=source_ptr->link();
+	while(source_ptr!=NULL)
+	{
+		list_insert(source_ptr->data(),source_ptr->exp(),tail);
+		tail=tail->link();
+		source_ptr=source_ptr->link();
+
+	}
+
+}
+template <class Item>
+void list_ord_insert(const Item & coeff,const Item& exp,node<Item>*& head_ptr){
+
+		if(head_ptr==NULL)
+		{
+			list_head_insert(coeff,exp,head_ptr);
+		}
+		else{
+			if(exp<=head_ptr->exp()){
+				list_head_insert(coeff,exp,head_ptr);
+			}
+			else{
+				node<Item>*cursor=head_ptr->link();
+				while(cursor!=NULL)
+				{
+					if(exp<=cursor->exp())
+					{
+						list_insert(coeff,exp,previous_pr(head_ptr,cursor));
+						return;
+					}
+
+					cursor=cursor->link();
+				}
+				list_insert(coeff,exp,previous_pr(head_ptr,cursor));
+			}
+		}
+}
+
+} /* namespace michele_maresca */
+
+
+
+
+
+
